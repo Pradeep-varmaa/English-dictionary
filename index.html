@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dict</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="dict" id="dictionary">
+        <h1>ENTER THE WORD</h1>
+        <input type="text" id="mytext"><br>
+        <button class="btn" id="mybtn" value="submit">SEARCH</button><br>
+        <p id="alert">Invalid input </p>
+        <p id="box"></p>
+    </div>
+</body>
+<script>
+    const Boxvalue = document.getElementById('mytext');
+    const SearchBtn = document.getElementById('mybtn');
+    const Output = document.getElementById('box')
+
+SearchBtn.addEventListener("click",async function () {
+    const data = await fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${Boxvalue.value}`);
+    if(!data.ok){
+        document.getElementById('alert').style.display="block";
+        Output.style.display="none";
+        return
+    }
+    const res = await data.json();
+    if(res.status === 404){
+        console.log("error");
+        return
+    }
+    Output.innerHTML = (res[0].meanings[0].definitions[0].definition);
+    Output.style.display="block";
+    document.getElementById('alert').style.display="none";
+})
+
+</script>
+</html>
